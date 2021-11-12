@@ -19,7 +19,7 @@ def _list():
 def detail(question_id):
     form = AnswerForm()
     question = Question.query.get_or_404(question_id)
-    return render_template('/question/question_detail.html', question=question, form=form)
+    return render_template('question/question_detail.html', question=question, form=form)
 
 @bp.route('/create/', methods=('GET', 'POST'))
 @login_required
@@ -39,7 +39,7 @@ def modify(question_id):
     question = Question.query.get_or_404(question_id)
     if g.user != question.user:
         flash('수정권한이 없습니다')
-        return redirect(url_for('question_detail', question_id=question_id))
+        return redirect(url_for('question.detail', question_id=question_id))
     if request.method == 'POST':
         form = QuestionForm()
         if form.validate_on_submit():
@@ -57,7 +57,7 @@ def delete(question_id):
     question = Question.query.get_or_404(question_id)
     if g.user != question.user:
         flash('삭제권한이 없습니다')
-        return redirect(url_for('question_detail', question_id=question_id))
+        return redirect(url_for('question.detail', question_id=question_id))
     db.session.delete(question)
     db.session.commit()
     return redirect(url_for('question._list'))
